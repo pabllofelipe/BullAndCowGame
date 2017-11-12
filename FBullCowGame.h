@@ -1,6 +1,8 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <map>
+#include <time.h>
 #define TMap std::map
 
 
@@ -36,6 +38,7 @@ public:
 	FString GetMyHiddenWord();
 	int GetMyHiddenWordLength() const;
 	bool IsGameWon() const;
+	FString GetWordInDictionary();
 	EGuessStatus CheckGuessValidity(FString) const;
 	FBullCowCount SubmitValidGuess(FString);
 

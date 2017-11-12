@@ -23,24 +23,54 @@ int32 FBullCowGame::GetMyHiddenWordLength() const
 
 int32 FBullCowGame::GetMaxTries() const 
 { 
-	return MyMaxTries; 
+	TMap<int32, int32> WordLengthToMaxTries{ {4,8},{5,9},{6,10},{7,12},{8,15} };
+
+	return WordLengthToMaxTries[GetMyHiddenWordLength()]; 
 }
 
 
 void FBullCowGame::reset()
 {
-	constexpr int32 MAX_TRIES = 10;
-	const FString HIDDEN_WORD = "bode";
-	MyHiddenWord = HIDDEN_WORD;
-
+	
+	MyHiddenWord = GetWordInDictionary();
 	MyCurrentTry = 1;
-	MyMaxTries = MAX_TRIES;
+	bGameIsWon = false;
 	return;
 }
 
 bool FBullCowGame::IsGameWon() const 
 {
 	return bGameIsWon;
+}
+
+FString FBullCowGame::GetWordInDictionary()
+{
+	int32 random = 0;
+	srand(time(0));
+	random = rand() % 19;
+	TMap<int32, FString>WordInDictionary
+	{
+	{0,"drive"},
+	{	1,"python" },
+	{	2,"mouse"},
+	{	3,"tela"},
+	{	4,"tecla"},
+	{	5,"site"},
+	{	6,"cabo"},
+	{	7,"cafe"},
+	{	8,"github"},
+	{	9,"blog"},
+	{	10,"chat"},
+	{	11,"chip"},
+	{	12,"email"},
+	{	13,"hacker"},
+	{	14,"host"},
+	{	15,"link"},
+	{	16,"software"},
+	{	17,"virus"},
+	{18,"teclado"}
+	};
+	return WordInDictionary[random];
 }
 
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const

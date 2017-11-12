@@ -52,10 +52,17 @@ void PlayGame()
 
 void PrintIntro()
 {
-	int32 WordLength = BCGame.GetMyHiddenWordLength();
+	FString Word = BCGame.GetMyHiddenWord();
 	
-	std::cout << "Bem-Vindo ao jogo Bull and Cows" << std::endl;
-	std::cout << "Voce consegue encontrar a palavra de " << WordLength << " letras nao repetidas ?" << std::endl;
+	std::cout << "Bem-Vindo ao jogo Bull and Cows\n" << std::endl;
+	std::cout << "                 }   {         ___ " << std::endl;
+	std::cout << "                 (o o)        (o o) " << std::endl;
+	std::cout << "          /-------\\ /          \\ /-------\\		 " << std::endl;
+	std::cout << "         / | BULL |O            O| COW  | \\			" << std::endl;
+	std::cout << "        *  |-,--- |              |------|  *			" << std::endl;
+	std::cout << " _\\|/_    ^      ^     _\\|/_    ^      ^    _\\|/_\n" << std::endl;
+	std::cout << "Voce tem "<< BCGame.GetMaxTries() << " tentativas para conseguir descobrir a palavra secreta\n " << std::endl;
+	std::cout << "* * * D I C A * * *: contem " << Word.length() << " letras nao repetidas\n" << std::endl;
 
 	std::cout << "Insira a palavra que voce acha ser a resposta: " << std::endl;
 	return;
@@ -70,20 +77,20 @@ FString GetValidGuess()
 	do {	
 
 		std::getline(std::cin, Guess);
-		std::cout << "\nTentativa " << BCGame.GetCurrentTries() << " : " << Guess << std::endl;
+		std::cout << "\nTentativa " << BCGame.GetCurrentTries() << " de " << BCGame.GetMaxTries() << " : " << Guess << std::endl;
 		Status = BCGame.CheckGuessValidity(Guess);
 		switch (Status)
 		{
 		case EGuessStatus::OK:
 			break;
 		case EGuessStatus::Not_Isogram:
-			std::cout << "Erro, Por Favor digite uma palavra sem letras repetidas " << std::endl;
+			std::cout << "Erro, Por Favor digite uma palavra sem letras repetidas\n " << std::endl;
 			break;
 		case EGuessStatus::Wrong_Length:
-			std::cout << "Erro, Por Favor digite uma palavra de " << BCGame.GetMyHiddenWordLength() << " letras" << std::endl;
+			std::cout << "Erro, Por Favor digite uma palavra de " << BCGame.GetMyHiddenWordLength() << " letras\n" << std::endl;
 			break;
 		case EGuessStatus::Not_Lowercase:
-			std::cout << "Erro, Por Favor digite uma palavra sem letras maiusculas " << std::endl;
+			std::cout << "Erro, Por Favor digite uma palavra sem letras maiusculas\n " << std::endl;
 			break;
 		default:
 			break;
