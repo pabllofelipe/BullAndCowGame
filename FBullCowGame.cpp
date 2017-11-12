@@ -1,5 +1,6 @@
 #include "FBullCowGame.h"
 
+
 FBullCowGame::FBullCowGame()
 {
 	reset();
@@ -44,7 +45,7 @@ bool FBullCowGame::IsGameWon() const
 
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 {
-	if (false)
+	if (!IsIsogram(Guess))
 	{
 		return EGuessStatus::Not_Isogram;
 	}
@@ -94,4 +95,28 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 		bGameIsWon = false;
 	}
 	return BullCowCount;
+}
+
+bool FBullCowGame::IsIsogram(FString Guess) const
+{
+	if (Guess.length() <= 1)
+	{
+		return true;
+	}
+
+	TMap <char, bool> LetterSeen;
+
+	for (auto Letter : Guess)
+	{
+		Letter = tolower(Letter);
+		if (LetterSeen[Letter])
+		{
+			return false;
+		}
+		else
+		{
+			LetterSeen[Letter] = true;
+		}
+	}
+	return true;
 }

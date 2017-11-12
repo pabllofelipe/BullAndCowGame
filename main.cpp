@@ -2,6 +2,9 @@
 #include <string>
 #include "FBullCowGame.h"
 
+
+
+
 void PrintIntro(); // Print the introduction of the game
 
 void PlayGame(); // Começa o jogo
@@ -29,12 +32,21 @@ void PlayGame()
 	int32 MaxTries = BCGame.GetMaxTries();
 	BCGame.reset();
 
-	while(!BCGame.IsGameWon() && BCGame.GetCurrentTries() <= MaxTries)
+	while (!BCGame.IsGameWon() && BCGame.GetCurrentTries() <= MaxTries)
 	{
 		FString Guess = GetValidGuess();
 		FBullCowCount BullCowCount = BCGame.SubmitValidGuess(Guess);
 		std::cout << "Bulls = " << BullCowCount.BullCount;
 		std::cout << ". Cows = " << BullCowCount.CowCounts << std::endl;
+		if (BCGame.IsGameWon())
+		{
+			std::cout << "\n\n* * * * P A R A B E N S --- V O C E   D E S C O B R I U  A  P A L A V R A   S E C R E T A  * * * *\n\n" << std::endl;
+		}
+		else
+		{
+			if (BCGame.GetCurrentTries() > 10)
+				std::cout << "\n\n* * * * V O C E   P E R D E U * * * *\n\n" << std::endl;
+		}
 	}
 }
 
@@ -82,7 +94,7 @@ FString GetValidGuess()
 
 bool AskToPlayAgain()
 {
-	std::cout << "Deseja continuar jogando ? " << std::endl;
+	std::cout << "Deseja continuar jogando ? (s/n) " << std::endl;
 	FString Resposta;
 	std::getline(std::cin, Resposta);
 	return (Resposta[0] == 's') || (Resposta[0] == 'S');
