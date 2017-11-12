@@ -49,7 +49,7 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 	{
 		return EGuessStatus::Not_Isogram;
 	}
-	else if (false)
+	else if (!isLowerCase(Guess))
 	{
 		return EGuessStatus::Not_Lowercase;
 	}
@@ -95,6 +95,18 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 		bGameIsWon = false;
 	}
 	return BullCowCount;
+}
+
+bool FBullCowGame::isLowerCase(FString Guess) const
+{
+	for (auto Letter : Guess)
+	{
+		if (!islower(Letter))
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 bool FBullCowGame::IsIsogram(FString Guess) const
