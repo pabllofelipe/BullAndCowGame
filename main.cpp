@@ -28,12 +28,13 @@ void PlayGame()
 
 	int32 MaxTries = BCGame.GetMaxTries();
 	BCGame.reset();
-	
-	
-	for (int32 i = 0; i < MaxTries; ++i)
+
+	while(!BCGame.IsGameWon() && BCGame.GetCurrentTries() <= MaxTries)
 	{
 		FString Guess = GetValidGuess();
-
+		FBullCowCount BullCowCount = BCGame.SubmitValidGuess(Guess);
+		std::cout << "Bulls = " << BullCowCount.BullCount;
+		std::cout << ". Cows = " << BullCowCount.CowCounts << std::endl;
 	}
 }
 
@@ -53,19 +54,15 @@ void PrintIntro()
 FString GetValidGuess()
 {
 	EGuessStatus Status = EGuessStatus::Invalid_Status;
-	int32 CurrentyTry = BCGame.GetCurrentTries();
+	FString Guess = "";
 	do {	
-		FString Guess = "";
+
 		std::getline(std::cin, Guess);
-		std::cout << "\nTentativa " << CurrentyTry << " : " << Guess << std::endl;
-		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
-		EGuessStatus Status = BCGame.CheckGuessValidity(Guess);
+		std::cout << "\nTentativa " << BCGame.GetCurrentTries() << " : " << Guess << std::endl;
+		Status = BCGame.CheckGuessValidity(Guess);
 		switch (Status)
 		{
 		case EGuessStatus::OK:
-			std::cout << "Bulls = " << BullCowCount.BullCount;
-			std::cout << ". Cows = " << BullCowCount.CowCounts << std::endl;
-			CurrentyTry++;
 			break;
 		case EGuessStatus::Not_Isogram:
 			std::cout << "Erro, Por Favor digite uma palavra sem letras repetidas " << std::endl;
@@ -77,9 +74,10 @@ FString GetValidGuess()
 			std::cout << "Erro, Por Favor digite uma palavra sem letras maiusculas " << std::endl;
 			break;
 		default:
-			return Guess;
+			break;
 		}std::cout << std::endl;
 	} while (Status != EGuessStatus::OK);
+	return Guess;
 }
 
 bool AskToPlayAgain()
