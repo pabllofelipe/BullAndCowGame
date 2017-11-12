@@ -1,2 +1,3 @@
-﻿  FBullCowGame.cpp
+﻿  main.cpp
+c:\users\pabll\source\repos\section_02\bullcowgame\main.cpp(83): warning C4715: 'GetValidGuess': nem todos os caminhos de controle retornam um valor
   BullCowGame.vcxproj -> C:\Users\pabll\source\repos\Section_02\Debug\BullCowGame.exe

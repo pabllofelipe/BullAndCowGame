@@ -6,7 +6,7 @@ void PrintIntro(); // Print the introduction of the game
 
 void PlayGame(); // Começa o jogo
 
-FString GetGuess(); //Pega a resposta via teclado
+FString GetValidGuess(); //Pega a resposta via teclado
 
 bool AskToPlayAgain(); // Pergunta se Deseja continuar jogando
 
@@ -28,25 +28,21 @@ void PlayGame()
 
 	int32 MaxTries = BCGame.GetMaxTries();
 	BCGame.reset();
-	int32 CurrentyTry = BCGame.GetCurrentTries();
+	
 	
 	for (int32 i = 0; i < MaxTries; ++i)
 	{
-		FString Guess = GetGuess();
+		FString Guess = GetValidGuess();
 
-		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
-		std::cout << "Tentativa "<< CurrentyTry++ <<" : " << Guess << std::endl;
-		std::cout << "Bulls = " << BullCowCount.BullCount;
-		std::cout << ". Cows = " << BullCowCount.CowCounts << std::endl;
 	}
 }
 
 void PrintIntro()
 {
-	FString WordLength = BCGame.GetMyHiddenWord();
+	int32 WordLength = BCGame.GetMyHiddenWordLength();
 	
 	std::cout << "Bem-Vindo ao jogo Bull and Cows" << std::endl;
-	std::cout << "Voce consegue encontrar a palavra de " << WordLength.length() << " letras nao repetidas ?" << std::endl;
+	std::cout << "Voce consegue encontrar a palavra de " << WordLength << " letras nao repetidas ?" << std::endl;
 
 	std::cout << "Insira a palavra que voce acha ser a resposta: " << std::endl;
 	return;
@@ -54,11 +50,36 @@ void PrintIntro()
 }
 
 
-FString GetGuess()
+FString GetValidGuess()
 {
-	FString Guess = "";
-	std::getline(std::cin, Guess);
-	return Guess;
+	EGuessStatus Status = EGuessStatus::Invalid_Status;
+	int32 CurrentyTry = BCGame.GetCurrentTries();
+	do {	
+		FString Guess = "";
+		std::getline(std::cin, Guess);
+		std::cout << "\nTentativa " << CurrentyTry << " : " << Guess << std::endl;
+		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
+		EGuessStatus Status = BCGame.CheckGuessValidity(Guess);
+		switch (Status)
+		{
+		case EGuessStatus::OK:
+			std::cout << "Bulls = " << BullCowCount.BullCount;
+			std::cout << ". Cows = " << BullCowCount.CowCounts << std::endl;
+			CurrentyTry++;
+			break;
+		case EGuessStatus::Not_Isogram:
+			std::cout << "Erro, Por Favor digite uma palavra sem letras repetidas " << std::endl;
+			break;
+		case EGuessStatus::Wrong_Length:
+			std::cout << "Erro, Por Favor digite uma palavra de " << BCGame.GetMyHiddenWordLength() << " letras" << std::endl;
+			break;
+		case EGuessStatus::Not_Lowercase:
+			std::cout << "Erro, Por Favor digite uma palavra sem letras maiusculas " << std::endl;
+			break;
+		default:
+			return Guess;
+		}std::cout << std::endl;
+	} while (Status != EGuessStatus::OK);
 }
 
 bool AskToPlayAgain()
